@@ -1,6 +1,6 @@
-import { Login } from "./components/login/login.js";
-import { Home } from "./components/home/home.js";
-import { NotFound } from "./components/notFound/notFound.js";
+import { Login } from "/assets/components/login/login.js";
+import { Home } from "/assets/components/home/home.js";
+import { NotFound } from "/assets/components/notFound/notFound.js";
 
 class Router {
     constructor(routes) {
