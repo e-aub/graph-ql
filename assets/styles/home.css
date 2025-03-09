@@ -230,6 +230,9 @@ body {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   padding: 1.5rem;
   margin-bottom: 1.5rem;
+  flex: 1 1 33.33%;
+  width: auto;
+  flex-wrap: wrap;
 }
 
 .card-header {
@@ -247,8 +250,9 @@ body {
 
 /* Grid layouts */
 .grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  display: flex;
+  justify-content:space-between;
+  flex-direction: row;
   gap: 1.5rem;
   margin-bottom: 2rem;
 }
@@ -397,7 +401,7 @@ body {
 }
 
 /* Responsive styles */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .sidebar {
     width: 100%;
     height: auto;
@@ -413,7 +417,7 @@ body {
   }
   
   .grid-container {
-    grid-template-columns: 1fr;
+    flex-direction: column;
   }
   
   .personal-info-card {
