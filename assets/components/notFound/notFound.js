@@ -1,5 +1,7 @@
 class NotFound {
-    constructor() {}
+    constructor() {
+        console.log("Not Found");
+    }
 }
 
 export { NotFound };

@@ -1,0 +1,1 @@
+// 0 -> 10 Aspiring developer / 10 -> 20 Beginner developer/  20 -> 30 Apprentice developer/ 30 -> 40 Assistant developer/ 40 -> 50 Basic developer/ 50 -> ... Junior develope
