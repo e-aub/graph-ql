@@ -1,3 +1,5 @@
+import { formatBytes } from "/assets/utils.js";
+
 class Overview {
     constructor(userData, parent) {
         this.userData = userData;
@@ -9,7 +11,7 @@ class Overview {
     render() {
         const stats = [
             { label: 'Current rank', value: this.userData["rank"] },
-            { label: 'Total XP', value: this.userData["xp"] },
+            { label: 'Total XP', value: formatBytes(this.userData["xp"]) },
             { label: 'Audit Ratio', value: this.userData["auditRatio"]},
         ]
         const gridContainer = document.createElement('div');

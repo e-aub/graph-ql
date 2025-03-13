@@ -1,10 +1,11 @@
 import { Sidebar } from "/assets/components/home/sidebar.js";
 import { Overview } from "/assets/components/home/overview.js";
 import { Graphs } from "/assets/components/home/graphs.js";
-import { Projects } from "/assets/components/home/projects.js";
 class Home {
-    constructor() {
+    constructor(router) {
+        this.router = router;
         document.querySelector("link[rel='stylesheet']").href = "/assets/styles/home.css";
+        document.body.innerHTML = "";
         this.userData = null;
         this.render();
     }
@@ -24,7 +25,6 @@ class Home {
 
         new Overview(this.userData["user"][0], main);
         new Graphs(this.userData["user"][0], main);
-        new Projects(this.userData["user"][0], main);
         document.body.appendChild(appContainer);
     }
 

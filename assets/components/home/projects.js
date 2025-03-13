@@ -1,109 +1,102 @@
-class Projects {
+import { formatBytes } from "/assets/utils.js";
+
+class ProjectsGraph {
     constructor(projects, parent) {
-        this.render(parent);
+        this.render(projects, parent);
     }
-    render(parent) {
-    //     <div class="card">
-    //     <div class="card-header">
-    //       <h3 class="card-title">Recent Projects</h3>
-    //     </div>
-        
-    //     <ul class="project-list">
-    //       <li class="project-item">
-    //         <div class="project-icon">📱</div>
-    //         <div class="project-info">
-    //           <div class="project-name">Flutter Mobile App</div>
-    //           <div class="project-path">/madere/div-01/flutter-app</div>
-    //         </div>
-    //         <div class="project-grade grade-pass">PASS</div>
-    //       </li>
-          
-    //       <li class="project-item">
-    //         <div class="project-icon">📄</div>
-    //         <div class="project-info">
-    //           <div class="project-name">GraphQL</div>
-    //           <div class="project-path">/madere/div-01/graphql</div>
-    //         </div>
-    //         <div class="project-grade grade-pass">PASS</div>
-    //       </li>
-          
-    //       <li class="project-item">
-    //         <div class="project-icon">🌐</div>
-    //         <div class="project-info">
-    //           <div class="project-name">Golang API Service</div>
-    //           <div class="project-path">/madere/div-01/golang-api</div>
-    //         </div>
-    //         <div class="project-grade grade-pass">PASS</div>
-    //       </li>
-          
-    //       <li class="project-item">
-    //         <div class="project-icon">🔍</div>
-    //         <div class="project-info">
-    //           <div class="project-name">JavaScript Frontend</div>
-    //           <div class="project-path">/madere/div-01/js-frontend</div>
-    //         </div>
-    //         <div class="project-grade grade-fail">FAIL</div>
-    //       </li>
-    //     </ul>
-    //   </div>
 
-        const card = document.createElement('div');
-        card.classList.add('card');
+    render(projects, parent) {
+        const totalProjectsXp = projects.reduce((total, project) => total + project.amount, 0);
+        const projectsCount = projects.length;
+        const x = 650;
+        const y = 290;
 
-        const cardHeader = document.createElement('div');
-        cardHeader.classList.add('card-header');
-        const cardTitle = document.createElement('h3');
-        cardTitle.classList.add('card-title');
-        cardTitle.textContent = 'Recent Projects';
-        cardHeader.appendChild(cardTitle);
-        card.appendChild(cardHeader);
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.setAttribute("viewBox", "0 0 800 500");
+        svg.style.width = "100%";
+        svg.style.height = "auto";
+        parent.appendChild(svg);
 
-        const projectList = document.createElement('ul');
-        projectList.classList.add('project-list');
+        const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        group.setAttribute("transform", "translate(0,20)");
+        svg.appendChild(group);
 
-        const projectItems = [
-            { icon: '📱', name: 'Flutter Mobile App', path: '/madere/div-01/flutter-app', grade: 'PASS' },
-            { icon: '📄', name: 'GraphQL', path: '/madere/div-01/graphql', grade: 'PASS' },
-            { icon: '🌐', name: 'Golang API Service', path: '/madere/div-01/golang-api', grade: 'PASS' },
-            { icon: '🔍', name: 'JavaScript Frontend', path: '/madere/div-01/js-frontend', grade: 'FAIL' },
-        ];
+        // X and Y axes
+        const xAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        xAxis.setAttribute("x1", "100");
+        xAxis.setAttribute("y1", "290");
+        xAxis.setAttribute("x2", `${x + 100}`);
+        xAxis.setAttribute("y2", "290");
+        xAxis.setAttribute("stroke", "black");
+        xAxis.setAttribute("stroke-width", "2");
+        group.appendChild(xAxis);
 
-        projectItems.forEach(item => {
-            const projectItem = document.createElement('li');
-            projectItem.classList.add('project-item');
+        const yAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        yAxis.setAttribute("x1", "100");
+        yAxis.setAttribute("y1", "0");
+        yAxis.setAttribute("x2", "100");
+        yAxis.setAttribute("y2", `${y}`);
+        yAxis.setAttribute("stroke", "black");
+        yAxis.setAttribute("stroke-width", "2");
+        group.appendChild(yAxis);
 
-            const projectIcon = document.createElement('div');
-            projectIcon.classList.add('project-icon');
-            projectIcon.textContent = item.icon;
-            projectItem.appendChild(projectIcon);
+        const maxProjectXp = Math.max(...projects.map(project => project.amount));
+        const tickInterval = Math.ceil(maxProjectXp / 15 / 100) * 100; 
+        const numTicks = Math.ceil(maxProjectXp / tickInterval);
 
-            const projectInfo = document.createElement('div');
-            projectInfo.classList.add('project-info');
+        // Add y-axis ticks and labels
+        for (let i = 0; i <= numTicks; i++) {
+            const tickValue = i * tickInterval;
+            const tickY = 290 - (tickValue / maxProjectXp) * y;
 
-            const projectName = document.createElement('div');
-            projectName.classList.add('project-name');
-            projectName.textContent = item.name;
-            projectInfo.appendChild(projectName);
+            const tick = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            tick.setAttribute("x1", "95");
+            tick.setAttribute("y1", `${tickY}`);
+            tick.setAttribute("x2", "100");
+            tick.setAttribute("y2", `${tickY}`);
+            tick.setAttribute("stroke", "black");
+            tick.setAttribute("stroke-width", "2");
+            group.appendChild(tick);
 
-            const projectPath = document.createElement('div');
-            projectPath.classList.add('project-path');
-            projectPath.textContent = item.path;
-            projectInfo.appendChild(projectPath);
+            const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            label.setAttribute("x", "80");
+            label.setAttribute("y", `${tickY + 5}`);
+            label.setAttribute("fill", "black");
+            label.setAttribute("font-size", "12px");
+            label.setAttribute("text-anchor", "end");
+            label.textContent = formatBytes(tickValue);
+            group.appendChild(label);
+        }
 
-            projectItem.appendChild(projectInfo);
+        // Render bars
+        const xGap = x / projectsCount;
+        let accumulatedX = 1;
 
-            const projectGrade = document.createElement('div');
-            projectGrade.classList.add('project-grade', `grade-${item.grade.toLowerCase()}`);
-            projectGrade.textContent = item.grade;
-            projectItem.appendChild(projectGrade);
+        for (let i = 0; i < projectsCount; i++) {
+            const project = projects[i];
+            const projectXp = project.amount;
+            const color = `hsl(${(i * 20) % 360}, 70%, 50%)`
+            const projectPercentage = ((projectXp / maxProjectXp) * y);
 
-            projectList.appendChild(projectItem);
-        });
-
-        card.appendChild(projectList);
-
-        parent.appendChild(card);
+            const bar = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            bar.setAttribute("x", `${100 + accumulatedX}`);
+            bar.setAttribute("y", `${y - projectPercentage}`);
+            bar.setAttribute("width", xGap);
+            bar.setAttribute("fill", color);
+            accumulatedX += xGap;
+            bar.setAttribute("height", `${projectPercentage}`);
+            const projectName = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            projectName.setAttribute("x", `${100 + accumulatedX - (xGap/2)}`);
+            projectName.setAttribute("y", `${y+10}`);
+            projectName.setAttribute("fill", color);
+            projectName.setAttribute("font-size", "12px");
+            projectName.setAttribute("text-anchor", "end");
+            projectName.setAttribute("transform", `rotate(-85, ${100 + accumulatedX - (xGap/2)}, ${y+10})`);
+            projectName.textContent = `${project.path.split("/")[3]} :${formatBytes(project.amount)}`;
+            group.appendChild(projectName);
+            group.appendChild(bar);
+        }
     }
 }
 
-export {Projects};
+export { ProjectsGraph };

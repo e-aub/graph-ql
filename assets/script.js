@@ -37,7 +37,6 @@ class Router {
         return {userId: data, authorized: true};
 
         } catch (error) {
-            console.log(error);
             localStorage.removeItem("token");
             return {userId: 0, authorized: false};
         }
@@ -45,7 +44,6 @@ class Router {
 
     async route(path){
         const {userId, authorized} = await this.#isAuthorized();
-        console.log(userId);
         if (!authorized && path === "/") {
             path = "/login";
         }else if (authorized && path === "/login") {
@@ -54,10 +52,11 @@ class Router {
 
         const route = this.routes[path];
 
+
         window.history.pushState({}, "", path);
     
         if(route){
-            return new route();
+            return new route(router);
         } else {
             return new NotFound();
         }
@@ -70,3 +69,6 @@ const router = new Router({
     "/": Home,
     "/login": Login,
 });
+
+
+export { router };

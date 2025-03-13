@@ -1,5 +1,8 @@
+import { router } from "/assets/script.js";
+
 class Login {
     constructor() {
+        document.body.innerHTML = "";
         document.querySelector("link[rel='stylesheet']").href = "/assets/styles/login.css";
         this.render();
     }
@@ -16,29 +19,25 @@ class Login {
                 throw new Error(data.error);
             }
             localStorage.setItem("token", data);
+            router.route("/");
         }catch(error){
-            console.log(error);
             errorMessage.style.display = "block";
         }
       }
 
     async render() {
-        // Create container
         const loginContainer = document.createElement('div');
         loginContainer.className = 'login-container';
         
-        // Create header
         const loginHeader = document.createElement('div');
         loginHeader.className = 'login-header';
         const heading = document.createElement('h1');
         heading.textContent = 'Login';
         loginHeader.appendChild(heading);
         
-        // Create form
         const form = document.createElement('form');
         form.id = 'login-form';
         
-        // Create username/email field
         const identifierGroup = document.createElement('div');
         identifierGroup.className = 'form-group';
         
@@ -55,7 +54,6 @@ class Login {
         identifierGroup.appendChild(identifierLabel);
         identifierGroup.appendChild(identifierInput);
         
-        // Create password field
         const passwordGroup = document.createElement('div');
         passwordGroup.className = 'form-group';
         
@@ -78,36 +76,29 @@ class Login {
         passwordGroup.appendChild(passwordInput);
         passwordGroup.appendChild(errorMessage);
         
-        // Create submit button
         const submitButton = document.createElement('button');
         submitButton.type = 'submit';
         submitButton.className = 'login-btn';
         submitButton.textContent = 'Sign In';
         
-        // Create toggle section
         const toggleForm = document.createElement('div');
         toggleForm.className = 'toggle-form';
         
         
-        // Assemble the form
         form.appendChild(identifierGroup);
         form.appendChild(passwordGroup);
         form.appendChild(submitButton);
         
-        // Assemble the container
         loginContainer.appendChild(loginHeader);
         loginContainer.appendChild(form);
         loginContainer.appendChild(toggleForm);
         
-        // Add event listeners
         form.addEventListener('submit', async function(event) {
           event.preventDefault();
           const identifier = identifierInput.value;
           const password = passwordInput.value;
           
-          // Example validation - replace with your actual authentication logic
           if (identifier && password) {
-            console.log('Login attempt:', { identifier, password });
             await this.login(event, errorMessage);
           } else {
             errorMessage.style.display = 'block';
