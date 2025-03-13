@@ -14,7 +14,7 @@ class Sidebar {
         aside.innerHTML =  `
   <div class="sidebar-header">
     <div class="profile-pic">
-      <img src="/assets/images/aelhadda.png" alt="Student Profile">
+      <img ${this.userData["login"] == "aelhadda" ? `src="/assets/images/aelhadda.png" `: ''} alt=${this.userData["login"]}>
     </div>
     <div class="user-info">
       <div class="user-name">${this.userData.login ? this.userData.login : "_"}</div>

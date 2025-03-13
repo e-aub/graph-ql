@@ -5,6 +5,7 @@ class SkillsGraph{
     }
 
   render(skills, parent){
+    console.log(skills);
     var skillColorMap = {
         "skill_algo": "#5E5E5E",       // Dark Gray - for general algorithms
         "skill_back-end": "#005F73",   // Deep Teal - for backend technologies
@@ -47,7 +48,7 @@ class SkillsGraph{
             }
             y += 30;
 
-            const color = skillColorMap[skill.type];
+            const color = skillColorMap[skill.type] ? skillColorMap[skill.type] : `hsl(${Math.random() * 360}, 50%, 50%)`;
             const percentage = skill.amount / skillsTotalAmount;
             const dashValue = percentage * circumference;
 
